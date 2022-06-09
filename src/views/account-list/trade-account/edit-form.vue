@@ -128,8 +128,8 @@
       </a-form-item>
       <a-form-item>
         <a-button type="primary" long :loading="submitLoading" @click="submit"
-          >提交</a-button
-        >
+          >提交
+        </a-button>
       </a-form-item>
     </a-form>
   </a-spin>
@@ -155,7 +155,7 @@
   });
 
   const formData = ref<TradeAccount>({
-    follow: {},
+    follow: {} as { id: number },
   });
 
   const loading = ref(true);
@@ -166,11 +166,11 @@
   const tradeTips = ref();
 
   if (id) {
-    querySingleTradeAccount({ id })
+    querySingleTradeAccount({ id: id as number })
       .then((resp) => {
         const account: TradeAccount = resp.data;
         Object.assign(formData.value, account);
-        formData.value.follow = { id: formData.value.follow };
+        formData.value.follow = { id: formData.value.follow } as { id: number };
         loading.value = false;
       })
       .catch(() => {
@@ -210,12 +210,14 @@
   };
 
   const exchangeAccountPositionQuery = () => {
-    if (formData.value.follow?.id) {
-      queryExchangeAccountPosition({ id: formData.value.follow?.id }).then(
-        (resp) => {
-          tips.value = `保证金余额: ${resp.data.toFixed(2)}`;
-        }
-      );
+    if ((formData.value.follow as { id: number })?.id) {
+      queryExchangeAccountPosition({
+        id: (formData.value.follow as { id: number })?.id,
+      } as {
+        id: number;
+      }).then((resp) => {
+        tips.value = `保证金余额: ${resp.data.toFixed(2)}`;
+      });
     } else {
       Message.error({
         content: '请选择追踪账号',

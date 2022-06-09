@@ -12,7 +12,7 @@
               @click="goto(tag)"
             >
               <span class="tag-link">
-                {{ $t(tag.title) }}
+                {{ tag.title }}
               </span>
               <span
                 class="arco-icon-hover arco-tag-icon-hover arco-icon-hover-size-medium arco-tag-close-btn"

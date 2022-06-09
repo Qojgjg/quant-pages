@@ -151,13 +151,17 @@
     loading.value = false;
   }
 
-  fetchData(dateRangeValue.value[0], dateRangeValue.value[1], route.params.id);
+  fetchData(
+    dateRangeValue.value[0],
+    dateRangeValue.value[1],
+    parseInt(route.params.id as string, 10)
+  );
 
   const onDateChange = () => {
     fetchData(
       dateRangeValue.value[0],
       dateRangeValue.value[1],
-      route.params.id
+      parseInt(route.params.id as string, 10)
     );
   };
 </script>

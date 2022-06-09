@@ -72,7 +72,7 @@
                     key={element?.name}
                     v-slots={{
                       icon,
-                      title: () => h(compile(element?.meta?.locale)),
+                      title: () => h(compile(element?.meta?.locale as string)),
                     }}
                   >
                     {travel(element?.children)}

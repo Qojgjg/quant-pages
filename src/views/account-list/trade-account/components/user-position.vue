@@ -20,7 +20,7 @@
     longPosition: PositionData[];
   }>();
 
-  const { chartOption } = useChartOption((isDark) => {
+  const { chartOption } = useChartOption((isDark: boolean) => {
     return {
       grid: {
         left: 0,
