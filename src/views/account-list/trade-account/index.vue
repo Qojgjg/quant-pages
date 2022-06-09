@@ -186,7 +186,7 @@
   const renderData = ref<ExchangeAccount[]>([]);
   const formModel = ref(generateFormModel());
   const basePagination: Pagination = {
-    current: 1,
+    current: 0,
     pageSize: 10,
   };
   const pagination = reactive({

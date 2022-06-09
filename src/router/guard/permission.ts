@@ -7,6 +7,10 @@ export default function setupPermissionGuard(router: Router) {
   router.beforeEach(async (to, from, next) => {
     NProgress.start();
     if (isLogin()) {
+      if (to.name === 'login') {
+        next({ name: 'TradeAccountList' });
+        return;
+      }
       next();
       NProgress.done();
     } else {
