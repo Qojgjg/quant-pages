@@ -1,7 +1,7 @@
 <template>
   <div class="login-form-wrapper">
-    <div class="login-form-title">{{ $t('login.form.title') }}</div>
-    <div class="login-form-sub-title">{{ $t('login.form.title') }}</div>
+    <div class="login-form-title">Administrator Login</div>
+    <div class="login-form-sub-title">Digital Asset Management Platform</div>
     <div class="login-form-error-msg">{{ errorMessage }}</div>
     <a-form
       ref="loginForm"
@@ -12,14 +12,11 @@
     >
       <a-form-item
         field="username"
-        :rules="[{ required: true, message: $t('login.form.userName.errMsg') }]"
+        :rules="[{ required: true, message: `用户名不能为空` }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
-        <a-input
-          v-model="userInfo.username"
-          :placeholder="$t('login.form.userName.placeholder')"
-        >
+        <a-input v-model="userInfo.username" :placeholder="`请输入用户名`">
           <template #prefix>
             <icon-user />
           </template>
@@ -27,19 +24,31 @@
       </a-form-item>
       <a-form-item
         field="password"
-        :rules="[{ required: true, message: $t('login.form.password.errMsg') }]"
+        :rules="[{ required: true, message: `密码不能为空` }]"
         :validate-trigger="['change', 'blur']"
         hide-label
       >
         <a-input-password
           v-model="userInfo.password"
-          :placeholder="$t('login.form.password.placeholder')"
+          :placeholder="`请输入密码`"
           allow-clear
         >
           <template #prefix>
             <icon-lock />
           </template>
         </a-input-password>
+      </a-form-item>
+      <a-form-item
+        field="code"
+        :rules="[{ required: true, message: `验证码不能为空` }]"
+        :validate-trigger="['change', 'blur']"
+        hide-label
+      >
+        <a-input v-model="userInfo.code" :placeholder="`请输入验证码`">
+          <template #prefix>
+            <icon-safe />
+          </template>
+        </a-input>
       </a-form-item>
       <a-space :size="16" direction="vertical">
         <div class="login-form-password-actions">
@@ -48,15 +57,11 @@
             :model-value="loginConfig.rememberPassword"
             @change="(setRememberPassword as any)"
           >
-            {{ $t('login.form.rememberPassword') }}
+            {{ `记住密码` }}
           </a-checkbox>
-          <a-link>{{ $t('login.form.forgetPassword') }}</a-link>
         </div>
         <a-button type="primary" html-type="submit" long :loading="loading">
-          {{ $t('login.form.login') }}
-        </a-button>
-        <a-button type="text" long class="login-form-register-btn">
-          {{ $t('login.form.register') }}
+          {{ `登录` }}
         </a-button>
       </a-space>
     </a-form>
@@ -68,26 +73,27 @@
   import { useRouter } from 'vue-router';
   import { Message } from '@arco-design/web-vue';
   import { ValidatedError } from '@arco-design/web-vue/es/form/interface';
-  import { useI18n } from 'vue-i18n';
   import { useStorage } from '@vueuse/core';
   import { useUserStore } from '@/store';
   import useLoading from '@/hooks/loading';
   import type { LoginData } from '@/api/user';
 
   const router = useRouter();
-  const { t } = useI18n();
+
   const errorMessage = ref('');
   const { loading, setLoading } = useLoading();
   const userStore = useUserStore();
 
   const loginConfig = useStorage('login-config', {
     rememberPassword: true,
-    username: 'admin', // 演示默认值
-    password: 'admin', // demo default value
+    username: 'jackjun',
+    password: '123123',
+    code: '123456',
   });
   const userInfo = reactive({
     username: loginConfig.value.username,
     password: loginConfig.value.password,
+    code: loginConfig.value.code,
   });
 
   const handleSubmit = async ({
@@ -102,19 +108,13 @@
       try {
         await userStore.login(values as LoginData);
         const { redirect, ...othersQuery } = router.currentRoute.value.query;
-        router.push({
-          name: (redirect as string) || 'Workplace',
+        Message.success(`登录成功！`);
+        await router.push({
+          name: (redirect as string) || 'TradeAccountList',
           query: {
             ...othersQuery,
           },
         });
-        Message.success(t('login.form.login.success'));
-        const { rememberPassword } = loginConfig.value;
-        const { username, password } = values;
-        // 实际生产环境需要进行加密存储。
-        // The actual production environment requires encrypted storage.
-        loginConfig.value.username = rememberPassword ? username : '';
-        loginConfig.value.password = rememberPassword ? password : '';
       } catch (err) {
         errorMessage.value = (err as Error).message;
       } finally {

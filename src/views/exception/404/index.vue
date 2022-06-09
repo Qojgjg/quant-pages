@@ -1,37 +1,27 @@
 <template>
   <div class="container">
-    <Breadcrumb :items="['menu.exception', 'menu.exception.404']" />
     <div class="content">
-      <a-result
-        class="result"
-        status="404"
-        :subtitle="$t('exception.result.404.description')"
-      >
+      <a-result class="result" status="404" subtitle="页面找不到啦～">
       </a-result>
       <div class="operation-row">
-        <a-button key="again" style="margin-right: 16px">
-          {{ $t('exception.result.404.retry') }}
-        </a-button>
-        <a-button key="back" type="primary">
-          {{ $t('exception.result.404.back') }}
-        </a-button>
+        <a-button key="back" type="primary" @click="back"> 返回 </a-button>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  import { useRouter } from 'vue-router';
 
-<script lang="ts">
-  export default {
-    name: '404',
-  };
+  const router = useRouter();
+  const back = () => router.back();
 </script>
 
 <style scoped lang="less">
   .container {
-    padding: 0 20px 20px 20px;
     height: calc(100% - 40px);
+    padding: 0 20px 20px 20px;
+
     :deep(.content) {
       position: relative;
       display: flex;

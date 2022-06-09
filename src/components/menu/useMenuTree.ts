@@ -50,11 +50,14 @@ export default function useMenuTree() {
           element.children = subItem;
           return element;
         }
-
+        // eslint-disable-next-line no-console
+        console.log(element, 'Hide');
         if (element.meta?.hideInMenu === false) {
           return element;
         }
 
+        // eslint-disable-next-line no-console
+        console.log('Hide');
         return null;
       });
       return collector.filter(Boolean);

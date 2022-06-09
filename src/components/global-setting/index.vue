@@ -10,22 +10,21 @@
     :width="300"
     unmount-on-close
     :visible="visible"
-    :cancel-text="$t('settings.close')"
-    :ok-text="$t('settings.copySettings')"
+    :cancel-text="`$t('settings.close')`"
+    :ok-text="`$t('settings.copySettings')`"
     @ok="copySettings"
     @cancel="cancel"
   >
-    <template #title> {{ $t('settings.title') }} </template>
-    <Block :options="contentOpts" :title="$t('settings.content')" />
-    <Block :options="othersOpts" :title="$t('settings.otherSettings')" />
-    <a-alert>{{ $t('settings.alertContent') }}</a-alert>
+    <template #title> {{ `$t('settings.title')` }} </template>
+    <Block :options="contentOpts" :title="`$t('settings.content')`" />
+    <Block :options="othersOpts" :title="`$t('settings.otherSettings')`" />
+    <a-alert>{{ `$t('settings.alertContent')` }}</a-alert>
   </a-drawer>
 </template>
 
 <script lang="ts" setup>
   import { computed } from 'vue';
   import { Message } from '@arco-design/web-vue';
-  import { useI18n } from 'vue-i18n';
   import { useClipboard } from '@vueuse/core';
   import { useAppStore } from '@/store';
   import Block from './block.vue';
@@ -33,7 +32,7 @@
   const emit = defineEmits(['cancel']);
 
   const appStore = useAppStore();
-  const { t } = useI18n();
+
   const { copy } = useClipboard();
   const visible = computed(() => appStore.globalSettings);
   const contentOpts = computed(() => [
@@ -72,7 +71,7 @@
   const copySettings = async () => {
     const text = JSON.stringify(appStore.$state, null, 2);
     await copy(text);
-    Message.success(t('settings.copySettings.message'));
+    Message.success(`t('settings.copySettings.message')`);
   };
   const setVisible = () => {
     appStore.updateSettings({ globalSettings: true });
